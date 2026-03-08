@@ -1,0 +1,50 @@
+export const trainers = [
+    {
+        id: 'trainer-1',
+        name: 'Priya Sharma',
+        email: 'priya@forgegym.com',
+        phone: '+91 99887 76655',
+        specialization: 'Strength & Conditioning',
+        experience: 6,
+        rating: 4.8,
+        clientCount: 12,
+        activeClients: ['member-1', 'member-2'],
+        certifications: ['ACE CPT', 'NSCA-CSCS'],
+        status: 'active',
+        joinDate: '2024-03-01',
+        sessionsThisMonth: 48,
+        avatar: null
+    },
+    {
+        id: 'trainer-2',
+        name: 'Rohit Verma',
+        email: 'rohit@forgegym.com',
+        phone: '+91 88776 65544',
+        specialization: 'Weight Loss & HIIT',
+        experience: 4,
+        rating: 4.6,
+        clientCount: 8,
+        activeClients: ['member-5'],
+        certifications: ['ISSA CPT', 'Precision Nutrition L1'],
+        status: 'active',
+        joinDate: '2024-08-15',
+        sessionsThisMonth: 36,
+        avatar: null
+    },
+    {
+        id: 'trainer-3',
+        name: 'Meera Nair',
+        email: 'meera@forgegym.com',
+        phone: '+91 77665 54433',
+        specialization: 'Yoga & Mobility',
+        experience: 8,
+        rating: 4.9,
+        clientCount: 15,
+        activeClients: [],
+        certifications: ['RYT-500', 'FMS L2'],
+        status: 'active',
+        joinDate: '2023-11-10',
+        sessionsThisMonth: 52,
+        avatar: null
+    }
+]
