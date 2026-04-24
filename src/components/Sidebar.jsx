@@ -34,20 +34,12 @@ function buildMenuItems(role, state, user) {
             { path: '/owner/settings', icon: Settings, label: 'Settings' }
         ],
         trainer: [
-            { section: 'CLIENTS' },
             { path: '/trainer', icon: LayoutDashboard, label: 'Dashboard' },
-            { path: '/trainer/clients', icon: Users, label: 'My Clients', badge: String(myClients.length) },
+            { path: '/trainer/clients', icon: Users, label: 'My Clients' },
             { path: '/trainer/workout-builder', icon: Dumbbell, label: 'Workout Plans' },
             { path: '/trainer/diet-builder', icon: UtensilsCrossed, label: 'Diet Charts' },
             { path: '/trainer/progress', icon: TrendingUp, label: 'Progress Tracking' },
-            { section: 'SCHEDULE' },
-            { path: '/trainer/sessions', icon: CalendarDays, label: 'Sessions' },
-            { path: '/trainer/attendance', icon: CalendarCheck, label: 'Attendance' },
-            { path: '/trainer/messages', icon: MessageSquare, label: 'Messages', badge: msgCount > 0 ? String(msgCount) : undefined },
-            { section: 'TOOLS' },
             { path: '/trainer/photos', icon: Camera, label: 'Progress Photos' },
-            { path: '/trainer/measurements', icon: Activity, label: 'Measurements' },
-            { path: '/trainer/settings', icon: Settings, label: 'Settings' }
         ],
         member: [
             { section: 'MAIN' },
