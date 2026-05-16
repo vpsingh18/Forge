@@ -10,6 +10,9 @@ import Members from './pages/owner/Members'
 import Trainers from './pages/owner/Trainers'
 import Revenue from './pages/owner/Revenue'
 import Notifications from './pages/owner/Notifications'
+import Renewals from './pages/owner/Renewals'
+import Analytics from './pages/owner/Analytics'
+import Settings from './pages/owner/Settings'
 
 // Trainer pages
 import TrainerDashboard from './pages/trainer/TrainerDashboard'
@@ -54,6 +57,9 @@ export default function App() {
       <Route path="/owner/trainers" element={<ProtectedRoute allowedRole="owner"><Trainers /></ProtectedRoute>} />
       <Route path="/owner/revenue" element={<ProtectedRoute allowedRole="owner"><Revenue /></ProtectedRoute>} />
       <Route path="/owner/notifications" element={<ProtectedRoute allowedRole="owner"><Notifications /></ProtectedRoute>} />
+      <Route path="/owner/renewals" element={<ProtectedRoute allowedRole="owner"><Renewals /></ProtectedRoute>} />
+      <Route path="/owner/analytics" element={<ProtectedRoute allowedRole="owner"><Analytics /></ProtectedRoute>} />
+      <Route path="/owner/settings" element={<ProtectedRoute allowedRole="owner"><Settings /></ProtectedRoute>} />
 
       {/* Trainer */}
       <Route path="/trainer" element={<ProtectedRoute allowedRole="trainer"><TrainerDashboard /></ProtectedRoute>} />

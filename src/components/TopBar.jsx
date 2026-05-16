@@ -1,20 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
-import { Search, Settings, Users, Star, Flame, LogOut } from 'lucide-react'
-import { useState } from 'react'
+import { Search, Settings, Bell, Users, Star, Flame, LogOut, User } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Bell, Users, Star, Flame, LogOut, User } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useApp } from '../context/AppContext'
-import { useNavigate } from 'react-router-dom'
 import { getInitials } from '../utils/helpers'
 import './TopBar.css'
 
 export default function TopBar() {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
-    const [isProfileOpen, setIsProfileOpen] = useState(false)
     const { state } = useApp()
-    const navigate = useNavigate()
+    const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const dropdownRef = useRef(null)
 
