@@ -158,7 +158,16 @@ export default function Members() {
     }
 
     // ── Validation ──
-    const canProceedStep1 = form.name.trim() && form.email.trim()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const phoneRegex = /^\+?[\d\s-]{10,}$/
+
+    const isEmailOk = form.email.trim() !== '' && emailRegex.test(form.email)
+    const isPhoneOk = form.phone.trim() === '' || phoneRegex.test(form.phone)
+
+    const emailError = form.email && !emailRegex.test(form.email) ? 'Invalid email format' : ''
+    const phoneError = form.phone && !phoneRegex.test(form.phone) ? 'Invalid phone format' : ''
+
+    const canProceedStep1 = form.name.trim() && isEmailOk && isPhoneOk
     const canSavePlan = form.planId && form.joinDate
 
     // ── Save ──
@@ -197,8 +206,7 @@ export default function Members() {
         <div className="animate-fade-in-up">
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                    <h1>Members</h1>
-                    <p>{state.members.length} Total Members</p>
+                    <h1 className="members-title">MEMBERS</h1>
                 </div>
                 <button className="btn btn-primary btn-sm" onClick={openAdd} id="add-member-btn">
                     <Plus size={16} /> Add Member
@@ -292,11 +300,13 @@ export default function Members() {
                 })}
             </div>
 
-            {filtered.length === 0 && (
-                <div className="empty-state">
-                    <p>No members match your search.</p>
-                </div>
-            )}
+            {
+                filtered.length === 0 && (
+                    <div className="empty-state">
+                        <p>No members match your search.</p>
+                    </div>
+                )
+            }
 
             {/* ──── Modal ──── */}
             <Modal isOpen={modalOpen} onClose={closeModal} title={config?.title(step)}>
@@ -319,13 +329,15 @@ export default function Members() {
                                 <input className="input" value={form.name} onChange={e => handleField('name', e.target.value)} placeholder="Arjun Mehta" />
                             </div>
                             <div className="crud-row-2">
-                                <div className="crud-row">
+                                <div className="crud-row" style={{ display: 'flex', flexDirection: 'column' }}>
                                     <label className="crud-label">Email *</label>
-                                    <input className="input" type="email" value={form.email} onChange={e => handleField('email', e.target.value)} placeholder="arjun@email.com" />
+                                    <input className={`input ${emailError ? 'input-error' : ''}`} type="email" value={form.email} onChange={e => handleField('email', e.target.value)} placeholder="arjun@email.com" style={emailError ? { borderColor: 'var(--danger)' } : {}} />
+                                    {emailError && <span style={{ color: 'var(--danger)', fontSize: 11, marginTop: 4 }}>{emailError}</span>}
                                 </div>
-                                <div className="crud-row">
+                                <div className="crud-row" style={{ display: 'flex', flexDirection: 'column' }}>
                                     <label className="crud-label">Phone</label>
-                                    <input className="input" value={form.phone} onChange={e => handleField('phone', e.target.value)} placeholder="+91 98765 43210" />
+                                    <input className={`input ${phoneError ? 'input-error' : ''}`} value={form.phone} onChange={e => handleField('phone', e.target.value)} placeholder="+91 98765 43210" style={phoneError ? { borderColor: 'var(--danger)' } : {}} />
+                                    {phoneError && <span style={{ color: 'var(--danger)', fontSize: 11, marginTop: 4 }}>{phoneError}</span>}
                                 </div>
                             </div>
                             <div className="crud-row-2">
@@ -485,6 +497,6 @@ export default function Members() {
                     </div>
                 </div>
             </Modal>
-        </div>
+        </div >
     )
 }

@@ -1,40 +1,82 @@
 .md-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: flex-end;
     margin-bottom: var(--space-6);
 }
 
 .md-title {
-    font-size: var(--text-3xl);
+    font-size: var(--text-4xl);
+    font-weight: 800;
     letter-spacing: 0.05em;
+    line-height: 1;
 }
 
 .md-sub {
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-size: 12px;
     margin-top: var(--space-1);
 }
 
 .md-layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr var(--right-panel-width);
     gap: var(--space-6);
 }
 
 .md-main {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
 .md-right {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    border-left: 1px solid var(--border);
+    padding-left: var(--space-5);
+}
+
+.md-section-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.md-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.md-section-action {
+    font-size: 11px;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: var(--font-mono);
+}
+
+.md-panel-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.md-separator {
+    height: 1px;
+    background: var(--border);
 }
 
 .md-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-4);
 }
 
@@ -44,20 +86,21 @@
     align-items: center;
     gap: var(--space-4);
     padding: var(--space-4);
-    background: var(--bg-input);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-4);
-    border: 1px solid var(--border);
 }
 
 .md-day-badge {
     background: var(--accent);
     color: var(--bg-primary);
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-md);
+    border-radius: 5px;
     font-weight: 800;
     font-family: var(--font-mono);
     font-size: var(--text-sm);
+    letter-spacing: 1px;
 }
 
 .md-progress-bar {
@@ -79,9 +122,19 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3) 0;
+    padding: 11px var(--space-4);
     border-bottom: 1px solid var(--border);
-    font-size: var(--text-sm);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.md-exercise-row:hover {
+    background: var(--bg-card-hover);
+}
+
+.md-exercise-row:last-child {
+    border-bottom: none;
 }
 
 .md-ex-done {
@@ -90,18 +143,21 @@
 
 .md-ex-current {
     color: var(--accent);
+    background: var(--accent-glow);
+    border-left: 3px solid var(--accent);
 }
 
 .md-ex-check {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border: 2px solid var(--border);
-    border-radius: 4px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 11px;
     flex-shrink: 0;
+    transition: all var(--transition-fast);
 }
 
 .md-ex-checked {
@@ -114,15 +170,16 @@
 .md-cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
+    gap: 5px;
     text-align: center;
 }
 
 .md-cal-label {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     color: var(--text-muted);
     padding: 4px;
+    font-family: var(--font-mono);
 }
 
 .md-cal-day {
@@ -130,14 +187,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 8px;
     border-radius: 4px;
     color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
 }
 
 .md-cal-attended {
     background: var(--accent);
+    border-color: var(--accent);
     color: var(--bg-primary);
+    font-weight: 700;
+}
+
+.md-cal-missed {
+    background: var(--danger-bg);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: var(--danger);
+}
+
+.md-cal-today {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+    color: var(--accent);
     font-weight: 700;
 }
 
@@ -146,19 +219,203 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-md);
-    margin-bottom: 2px;
+    padding: 9px 6px;
+    border-bottom: 1px solid var(--border);
+}
+
+.md-lb-row:last-child {
+    border-bottom: none;
 }
 
 .md-lb-you {
     background: var(--accent-glow);
-    border: 1px solid var(--accent);
+    border-radius: 8px;
+    border: none;
+    padding: 8px 6px;
+    margin: 0 -6px;
+}
+
+.md-lb-rank {
+    font-size: 18px;
+    font-weight: 800;
+    width: 22px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.md-lb-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.md-lb-name {
+    font-size: 12px;
+    font-weight: 500;
+    flex: 1;
+}
+
+.md-lb-pts {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Session Cards */
+.md-session-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-md);
+    padding: 13px 14px;
+    margin-bottom: 9px;
+    position: relative;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.md-session-card:hover {
+    border-color: var(--accent);
+}
+
+.md-session-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    margin-bottom: 3px;
+}
+
+.md-session-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.md-session-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.md-session-spots {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    background: var(--bg-input);
+    color: var(--text-muted);
+}
+
+/* Notification items */
+.md-notif-item {
+    display: flex;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.md-notif-item:last-child {
+    border-bottom: none;
+}
+
+.md-notif-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.md-notif-text {
+    font-size: 12px;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.md-notif-time {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-top: 2px;
+}
+
+/* Quick Actions */
+.md-qa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.md-qa-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 13px 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.md-qa-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+}
+
+/* Macros ring */
+.md-macro-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.md-macro-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    width: 42px;
+    font-family: var(--font-mono);
+}
+
+.md-macro-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--bg-input);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.md-macro-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+
+.md-macro-val {
+    font-size: 10px;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    width: 55px;
+    text-align: right;
 }
 
 @media (max-width: 1200px) {
     .md-layout {
         grid-template-columns: 1fr;
+    }
+
+    .md-right {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--border);
+        padding-top: var(--space-4);
     }
 }
 
@@ -166,6 +423,7 @@
     .md-header {
         flex-direction: column;
         gap: var(--space-4);
+        align-items: flex-start;
     }
 
     .md-stats {

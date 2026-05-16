@@ -104,6 +104,15 @@
     font-size: var(--text-xs);
 }
 
+.members-title {
+    font-family: var(--font-mono);
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
 .text-danger {
     color: var(--danger);
     font-weight: 600;

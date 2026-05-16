@@ -2,7 +2,7 @@ import React from 'react'
 import { useApp } from '../../context/AppContext'
 import { useAuth } from '../../context/AuthContext'
 import StatCard from '../../components/StatCard'
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { formatCurrency, formatDate, daysUntil, getInitials } from '../../utils/helpers'
 import './OwnerDashboard.css'
 
@@ -143,18 +143,12 @@ export default function OwnerDashboard() {
                                 <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>Last 7 months</span>
                             </div>
                             <ResponsiveContainer width="100%" height={180}>
-                                <AreaChart data={analytics.revenue.breakdown}>
-                                    <defs>
-                                        <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.3} />
-                                            <stop offset="95%" stopColor="var(--accent)" stopOpacity={0} />
-                                        </linearGradient>
-                                    </defs>
+                                <LineChart data={analytics.revenue.breakdown}>
                                     <XAxis dataKey="month" tick={{ fill: '#6B6B6B', fontSize: 12 }} axisLine={false} tickLine={false} />
                                     <YAxis tick={{ fill: '#6B6B6B', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={v => `₹${v / 1000}k`} />
                                     <Tooltip contentStyle={TooltipStyle} formatter={v => [formatCurrency(v), 'Revenue']} />
-                                    <Area type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2} fill="url(#revGrad)" />
-                                </AreaChart>
+                                    <Line type="monotone" dataKey="value" stroke="#F59E0B" strokeWidth={2.5} dot={{ fill: '#F59E0B', r: 4 }} />
+                                </LineChart>
                             </ResponsiveContainer>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--space-4)', fontSize: 'var(--text-sm)', fontFamily: 'var(--font-mono)' }}>
                                 <div><span style={{ color: 'var(--text-muted)', fontSize: 'var(--text-xs)' }}>TOTAL COLLECTED</span><br /><strong>₹{totalRevenue.toLocaleString('en-IN')}</strong></div>
