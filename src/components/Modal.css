@@ -19,8 +19,21 @@
     border-radius: var(--radius-xl);
     width: 100%;
     max-width: 520px;
-    max-height: 85vh;
-    overflow-y: auto;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Wider variant for the workout-view modal */
+.modal-content--wide {
+    max-width: 760px;
+}
+
+/* Taller + wider variant for Assign Program */
+.modal-content--xl {
+    max-width: 680px;
+    max-height: 92vh;
 }
 
 .modal-header {
@@ -28,6 +41,8 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--space-6) var(--space-6) var(--space-4);
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
 }
 
 .modal-title {
@@ -56,5 +71,8 @@
 }
 
 .modal-body {
-    padding: 0 var(--space-6) var(--space-6);
+    padding: var(--space-5) var(--space-6) var(--space-6);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
 }

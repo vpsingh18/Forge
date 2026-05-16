@@ -17,6 +17,7 @@ import Clients from './pages/trainer/Clients'
 import WorkoutBuilder from './pages/trainer/WorkoutBuilder'
 import DietBuilder from './pages/trainer/DietBuilder'
 import ProgressTracker from './pages/trainer/ProgressTracker'
+import ProgressPhotos from './pages/trainer/ProgressPhotos'
 
 // Member pages
 import MemberDashboard from './pages/member/MemberDashboard'
@@ -60,6 +61,7 @@ export default function App() {
       <Route path="/trainer/workout-builder" element={<ProtectedRoute allowedRole="trainer"><WorkoutBuilder /></ProtectedRoute>} />
       <Route path="/trainer/diet-builder" element={<ProtectedRoute allowedRole="trainer"><DietBuilder /></ProtectedRoute>} />
       <Route path="/trainer/progress" element={<ProtectedRoute allowedRole="trainer"><ProgressTracker /></ProtectedRoute>} />
+      <Route path="/trainer/photos" element={<ProtectedRoute allowedRole="trainer"><ProgressPhotos /></ProtectedRoute>} />
 
       {/* Member */}
       <Route path="/member" element={<ProtectedRoute allowedRole="member"><MemberDashboard /></ProtectedRoute>} />

@@ -214,6 +214,65 @@
     cursor: pointer;
 }
 
+/* Settings Dropdown */
+.topbar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+    overflow: hidden;
+    animation: scaleIn 0.15s ease forwards;
+    transform-origin: top right;
+}
+
+.topbar-dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+}
+
+.topbar-dropdown-divider {
+    height: 1px;
+    background: var(--border);
+}
+
+.topbar-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition-fast);
+}
+
+.topbar-dropdown-item:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+.topbar-dropdown-danger {
+    color: var(--danger);
+}
+
+.topbar-dropdown-danger:hover {
+    background: var(--danger-bg) !important;
+    color: var(--danger) !important;
+}
+
 @media (max-width: 768px) {
     .topbar {
         padding: 0 var(--space-4);
