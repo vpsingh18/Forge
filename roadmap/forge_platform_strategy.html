@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>forge_platform_strategy.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="forge--platform-strategy-web-vs-mobile-split">Forge — Platform Strategy: Web vs. Mobile Split</h1>
+<h2 id="the-question">The Question</h2>
+<blockquote>
+<p>Should the <strong>Owner module</strong> be a web application while the <strong>Trainer and Member modules</strong> are mobile applications?</p>
+</blockquote>
+<hr>
+<h2 id="tldr-verdict-yes--this-split-is-recommended-%E2%9C%85">TL;DR Verdict: <strong>Yes — This Split Is Recommended</strong> ✅</h2>
+<p>The Owner's workflow is <strong>analytical and desk-based</strong> (dashboards, reports, spreadsheets). Trainers and Members operate <strong>on the gym floor</strong> with their phones. Matching the platform to the usage context is the single most impactful UX decision for Forge.</p>
+<hr>
+<h2 id="1-behavioral-justification">1. Behavioral Justification</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>When They Use Forge</th>
+<th>Where They Are</th>
+<th>Primary Actions</th>
+<th>Best Platform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Owner</strong></td>
+<td>Morning review, end-of-day reports, monthly planning</td>
+<td>Office / desk / laptop</td>
+<td>View charts, manage lists, export reports, compose notifications</td>
+<td>🖥️ <strong>Web</strong></td>
+</tr>
+<tr>
+<td><strong>Trainer</strong></td>
+<td>Between sessions, on the gym floor, during client meetings</td>
+<td>Walking around, standing</td>
+<td>Quick client lookup, assign workout, log measurements, snap progress photos</td>
+<td>📱 <strong>Mobile</strong></td>
+</tr>
+<tr>
+<td><strong>Member</strong></td>
+<td>At the gym, before/after workouts, on commute</td>
+<td>Gym floor, locker room, home</td>
+<td>QR check-in, log exercises, view plan, check leaderboard, chat trainer</td>
+<td>📱 <strong>Mobile</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!IMPORTANT]
+The Owner rarely needs the app in their pocket. Trainers and Members <strong>always</strong> need it in their pocket. Building mobile-first for the wrong role wastes resources; building web-only for the gym floor kills adoption.</p>
+</blockquote>
+<hr>
+<h2 id="2-comparative-study">2. Comparative Study</h2>
+<h3 id="option-a-everything-as-a-web-app-unified-spa">Option A: Everything as a Web App (Unified SPA)</h3>
+<table>
+<thead>
+<tr>
+<th>✅ Pros</th>
+<th>❌ Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single codebase, one deployment</td>
+<td>No push notifications without workarounds (PWA has limits)</td>
+</tr>
+<tr>
+<td>Faster initial development</td>
+<td>No camera/NFC/QR native access</td>
+</tr>
+<tr>
+<td>No app store approvals needed</td>
+<td>Poor gym-floor UX on mobile browser</td>
+</tr>
+<tr>
+<td>Easier to update (no app updates)</td>
+<td>No offline capability</td>
+</tr>
+<tr>
+<td>Lower cost for MVP</td>
+<td>Members unlikely to bookmark a web app</td>
+</tr>
+<tr>
+<td></td>
+<td>Can't leverage device sensors (accelerometer, etc.)</td>
+</tr>
+<tr>
+<td></td>
+<td>No home screen presence = low retention</td>
+</tr>
+</tbody>
+</table>
+<h3 id="option-b-everything-as-a-mobile-app">Option B: Everything as a Mobile App</h3>
+<table>
+<thead>
+<tr>
+<th>✅ Pros</th>
+<th>❌ Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Great gym-floor experience</td>
+<td>Owner dashboards are cramped on mobile screens</td>
+</tr>
+<tr>
+<td>Native push notifications</td>
+<td>Reviewing large tables/reports is painful</td>
+</tr>
+<tr>
+<td>Camera, QR, NFC access</td>
+<td>Owner doesn't need an app — they need a dashboard</td>
+</tr>
+<tr>
+<td>Offline capability</td>
+<td>Higher development cost</td>
+</tr>
+<tr>
+<td>Home screen presence</td>
+<td>App store review cycles slow down releases</td>
+</tr>
+<tr>
+<td></td>
+<td>Desktop experience entirely lost</td>
+</tr>
+</tbody>
+</table>
+<h3 id="option-c-owner--web-trainermember--mobile-recommended-%E2%9C%85">Option C: Owner = Web, Trainer/Member = Mobile (Recommended ✅)</h3>
+<table>
+<thead>
+<tr>
+<th>✅ Pros</th>
+<th>❌ Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Each role gets the ideal platform</td>
+<td>Two codebases to maintain</td>
+</tr>
+<tr>
+<td>Owner gets full-width dashboards and charts</td>
+<td>Shared backend required</td>
+</tr>
+<tr>
+<td>Trainer/Member get native camera, QR, push</td>
+<td>Slightly higher initial cost than web-only</td>
+</tr>
+<tr>
+<td>Mobile presence drives member retention</td>
+<td>Need app store approvals for mobile</td>
+</tr>
+<tr>
+<td>Can share 60-70% of business logic</td>
+<td></td>
+</tr>
+<tr>
+<td>Scales naturally to multi-branch</td>
+<td></td>
+</tr>
+<tr>
+<td>Better perceived quality</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3-hybrid-architecture">3. Hybrid Architecture</h2>
+<pre><code class="language-mermaid"><div class="mermaid">graph LR
+    subgraph Web["🖥️ Web (React SPA)"]
+        OD["Owner Dashboard"]
+        OA["Owner Analytics"]
+        OM["Owner Management"]
+    end
+
+    subgraph Mobile["📱 Mobile (React Native)"]
+        TD["Trainer Dashboard"]
+        TW["Workout Builder"]
+        MD["Member Dashboard"]
+        MQ["QR Check-in"]
+        ML["Workout Log"]
+    end
+
+    subgraph Shared["🔗 Shared Layer"]
+        API["REST / GraphQL API"]
+        AUTH["Auth (JWT)"]
+        BL["Business Logic"]
+    end
+
+    subgraph Backend["☁️ Backend"]
+        SRV["Node.js / Express"]
+        DB[("PostgreSQL")]
+        WS["WebSocket<br/>(Chat + Notifications)"]
+    end
+
+    Web --> API
+    Mobile --> API
+    API --> AUTH
+    AUTH --> BL
+    BL --> SRV
+    SRV --> DB
+    SRV --> WS
+    WS --> Mobile
+</div></code></pre>
+<hr>
+<h2 id="4-phased-implementation-roadmap">4. Phased Implementation Roadmap</h2>
+<pre><code class="language-mermaid"><div class="mermaid">gantt
+    title Forge Development Roadmap
+    dateFormat YYYY-MM-DD
+    axisFormat %b %Y
+
+    section Phase 1 — Web MVP
+    Project Setup & Design System          :p1a, 2026-03-05, 7d
+    Auth + Onboarding (all roles, web)     :p1b, after p1a, 5d
+    Owner Dashboard + Analytics            :p1c, after p1b, 10d
+    Trainer Module (web prototype)         :p1d, after p1b, 10d
+    Member Module (web prototype)          :p1e, after p1b, 10d
+    Gamification + Leaderboard             :p1f, after p1e, 5d
+    Testing + Polish                       :p1g, after p1f, 5d
+
+    section Phase 2 — Mobile Apps
+    React Native project setup             :p2a, after p1g, 5d
+    Trainer App (native)                   :p2b, after p2a, 15d
+    Member App (native + QR)               :p2c, after p2a, 15d
+    Push Notifications integration         :p2d, after p2c, 5d
+    App Store submission                   :p2e, after p2d, 7d
+
+    section Phase 3 — Advanced
+    AI Recommendation Engine               :p3a, after p2e, 10d
+    Body Composition Tracking              :p3b, after p3a, 10d
+    NFC Attendance                         :p3c, after p3b, 5d
+    Wearable Integration                   :p3d, after p3c, 10d
+</div></code></pre>
+<h3 id="phase-breakdown">Phase Breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Duration</th>
+<th>Deliverables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase 1: Web MVP</strong></td>
+<td>~6 weeks</td>
+<td>Full Owner dashboard, functional Trainer &amp; Member modules in web (usable immediately; serves as prototype for mobile)</td>
+</tr>
+<tr>
+<td><strong>Phase 2: Mobile Apps</strong></td>
+<td>~6 weeks</td>
+<td>Native Trainer &amp; Member apps with camera, QR, push notifications. Owner continues on web.</td>
+</tr>
+<tr>
+<td><strong>Phase 3: Advanced</strong></td>
+<td>~5 weeks</td>
+<td>AI engine, body composition, NFC, wearables</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!TIP]
+<strong>Phase 1 doubles as a prototype.</strong> By building all three modules as a web app first, you validate every user flow before investing in native mobile. The Owner module stays as web permanently; Trainer &amp; Member modules graduate to native apps in Phase 2.</p>
+</blockquote>
+<hr>
+<h2 id="5-tech-stack-mapping">5. Tech Stack Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Owner (Web)</th>
+<th>Trainer (Mobile)</th>
+<th>Member (Mobile)</th>
+<th>Shared</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework</strong></td>
+<td>React (Vite)</td>
+<td>React Native</td>
+<td>React Native</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>UI Library</strong></td>
+<td>Custom CSS</td>
+<td>React Native Paper</td>
+<td>React Native Paper</td>
+<td>Design tokens</td>
+</tr>
+<tr>
+<td><strong>Navigation</strong></td>
+<td>React Router</td>
+<td>React Navigation</td>
+<td>React Navigation</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>Context + useReducer</td>
+<td>Context + useReducer</td>
+<td>Context + useReducer</td>
+<td>Same patterns</td>
+</tr>
+<tr>
+<td><strong>API Client</strong></td>
+<td>Fetch / Axios</td>
+<td>Fetch / Axios</td>
+<td>Fetch / Axios</td>
+<td>Same service layer</td>
+</tr>
+<tr>
+<td><strong>Charts</strong></td>
+<td>Recharts</td>
+<td>Victory Native</td>
+<td>Victory Native</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Camera</strong></td>
+<td>—</td>
+<td>react-native-camera</td>
+<td>react-native-camera</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>QR/NFC</strong></td>
+<td>—</td>
+<td>react-native-qrcode</td>
+<td>react-native-qrcode</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Push</strong></td>
+<td>—</td>
+<td>Firebase FCM</td>
+<td>Firebase FCM</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Node.js + Express</td>
+<td>← same</td>
+<td>← same</td>
+<td>PostgreSQL, Redis</td>
+</tr>
+</tbody>
+</table>
+<h3 id="code-sharing-strategy">Code Sharing Strategy</h3>
+<pre><code class="language-mermaid"><div class="mermaid">pie title Code Sharing Breakdown
+    "Shared Business Logic" : 35
+    "Shared API Layer" : 20
+    "Shared Types/Models" : 10
+    "Web-Specific UI" : 15
+    "Mobile-Specific UI" : 20
+</div></code></pre>
+<p>~65% of non-UI code is shared across platforms via a common <code>packages/shared</code> module.</p>
+<hr>
+<h2 id="6-risk-analysis">6. Risk Analysis</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Likelihood</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mobile development delays</td>
+<td>Medium</td>
+<td>High</td>
+<td>Phase 1 web app covers all roles as fallback</td>
+</tr>
+<tr>
+<td>App store rejection</td>
+<td>Low</td>
+<td>Medium</td>
+<td>Follow guidelines strictly; no restricted APIs</td>
+</tr>
+<tr>
+<td>Code drift between web &amp; mobile</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Shared package for business logic, types, API</td>
+</tr>
+<tr>
+<td>Owner wants mobile access</td>
+<td>Low</td>
+<td>Low</td>
+<td>PWA wrapper or responsive web as bridge</td>
+</tr>
+<tr>
+<td>Trainer prefers web on tablet</td>
+<td>Low</td>
+<td>Low</td>
+<td>React Native works on tablets natively</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="7-cost-comparison-estimated">7. Cost Comparison (Estimated)</h2>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Dev Time</th>
+<th>Relative Cost</th>
+<th>User Satisfaction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Web Only</strong></td>
+<td>6-8 weeks</td>
+<td>💰 Low</td>
+<td>⭐⭐⭐ (Owners happy, others limited)</td>
+</tr>
+<tr>
+<td><strong>Mobile Only</strong></td>
+<td>10-14 weeks</td>
+<td>💰💰💰 High</td>
+<td>⭐⭐⭐ (Trainers/Members happy, Owner cramped)</td>
+</tr>
+<tr>
+<td><strong>Hybrid Split</strong> ✅</td>
+<td>12-16 weeks</td>
+<td>💰💰 Medium</td>
+<td>⭐⭐⭐⭐⭐ (Everyone gets ideal platform)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!NOTE]
+The hybrid approach costs ~30% more than web-only but delivers significantly better UX for Trainers and Members — who are 90% of your daily active users.</p>
+</blockquote>
+<hr>
+<h2 id="8-recommendation-summary">8. Recommendation Summary</h2>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A["Start with Phase 1:<br/>Web MVP for ALL roles"] --> B{"Validate flows<br/>& get user feedback"}
+    B --> C["Phase 2: Build native<br/>Trainer + Member apps"]
+    C --> D["Owner stays on Web<br/>(full dashboard power)"]
+    C --> E["Trainer/Member graduate<br/>to mobile (native power)"]
+    D --> F["🎯 Each role gets<br/>their ideal platform"]
+    E --> F
+
+    style A fill:#1A1A1A,stroke:#F59E0B,color:#F5F5F5
+    style F fill:#22C55E,stroke:#15803D,color:#000
+</div></code></pre>
+<p><strong>Build web first for speed. Migrate Trainer/Member to mobile for quality. Keep Owner on web forever.</strong> This is the most cost-effective path that maximizes user satisfaction across all three roles.</p>
+
+</body>
+</html>

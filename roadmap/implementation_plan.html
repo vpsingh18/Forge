@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>implementation_plan.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="forge--implementation-plan">Forge — Implementation Plan</h1>
+<p>A hybrid-platform gym management application: <strong>Owner dashboard on web</strong>, <strong>Trainer &amp; Member apps on mobile</strong> — with a shared design system and business logic.</p>
+<hr>
+<h2 id="1-product-vision--differentiation">1. Product Vision &amp; Differentiation</h2>
+<p>Forge is designed to <strong>feel light and intentional</strong> — unlike bloated, enterprise-style gym software. Every screen serves a purpose, every animation gives feedback, and every metric provides an actionable insight. The core differentiators:</p>
+<table>
+<thead>
+<tr>
+<th>Differentiator</th>
+<th>What It Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platform-Matched UX</strong></td>
+<td>Owner gets full-width dashboards on web; Trainers &amp; Members get native mobile with camera, QR, and push notifications</td>
+</tr>
+<tr>
+<td><strong>QR Attendance</strong></td>
+<td>Frictionless check-in via a unique per-member QR code scanned at the gym entrance</td>
+</tr>
+<tr>
+<td><strong>Gamified Engagement</strong></td>
+<td>Streaks, badges, leaderboards, and monthly fitness challenges keep members coming back</td>
+</tr>
+<tr>
+<td><strong>Trainer Marketplace</strong></td>
+<td>Members can browse, compare, and book sessions with trainers — turning each trainer into a micro-brand</td>
+</tr>
+<tr>
+<td><strong>Hybrid Architecture</strong></td>
+<td>Shared business logic across web and mobile; Owner stays on web permanently, Trainer/Member graduate to native apps</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-core-features--mvp-scope">2. Core Features &amp; MVP Scope</h2>
+<h3 id="21-phase-1--web-mvp-all-roles">2.1 Phase 1 — Web MVP (All Roles)</h3>
+<blockquote>
+<p>[!IMPORTANT]
+Phase 1 builds <strong>all three modules as a web app</strong> to validate every user flow before investing in native mobile. The Owner module stays web permanently; Trainer &amp; Member modules serve as functional prototypes.</p>
+</blockquote>
+<h4 id="authentication--onboarding">Authentication &amp; Onboarding</h4>
+<ul>
+<li>Role-based sign-up/login (Owner, Trainer, Member)</li>
+<li>Quick 3-step animated onboarding per role</li>
+</ul>
+<h4 id="owner-module-web--permanent-home">Owner Module (Web — permanent home)</h4>
+<ul>
+<li>Dashboard: active members, revenue, upcoming renewals, class utilization (charts)</li>
+<li>Member &amp; Trainer directory with search/filter</li>
+<li>Payment &amp; renewal analytics</li>
+<li>Push notification composer (mock)</li>
+</ul>
+<h4 id="trainer-module-web--prototype-for-phase-2-mobile">Trainer Module (Web — prototype for Phase 2 mobile)</h4>
+<ul>
+<li>Client list with profile cards</li>
+<li>Workout plan builder (exercise picker, sets/reps, schedule)</li>
+<li>Diet chart builder (meal plan grid) — <em>PT members only</em></li>
+<li>Progress tracker (photo timeline + measurements log) — <em>PT members only</em></li>
+</ul>
+<h4 id="member-module-web--prototype-for-phase-2-mobile">Member Module (Web — prototype for Phase 2 mobile)</h4>
+<ul>
+<li>Personal dashboard: today's workout, diet plan, streak counter, badges</li>
+<li>Workout log (mark exercises done)</li>
+<li>Calories burnt per exercise card (displays estimated calories for each logged exercise)</li>
+<li>Diet plan viewer — <em>PT members only</em></li>
+<li>Attendance history + QR code for check-in</li>
+<li>Notification feed (renewals, trainer updates)</li>
+</ul>
+<h4 id="novel-features-mvp-light-versions">Novel Features (MVP-light versions)</h4>
+<ul>
+<li><strong>Community Leaderboard</strong>: Points from workouts logged, streaks, challenges</li>
+<li><strong>In-App Messaging</strong>: Simple chat between trainer and member</li>
+</ul>
+<h3 id="22-phase-2--native-mobile-trainer--member">2.2 Phase 2 — Native Mobile (Trainer &amp; Member)</h3>
+<p>Trainer and Member modules graduate from web prototype to native mobile apps:</p>
+<ul>
+<li><strong>React Native apps</strong> for iOS and Android</li>
+<li>Native camera access for progress photos</li>
+<li>Native QR code scanning for attendance</li>
+<li>Push notifications via Firebase FCM</li>
+<li>Offline-capable workout logging</li>
+<li>Bottom tab navigation optimized for one-handed use</li>
+<li>Owner module <strong>remains on web</strong> (no mobile port needed)</li>
+</ul>
+<h3 id="23-phase-3--advanced-features">2.3 Phase 3 — Advanced Features</h3>
+<ul>
+<li>AI Recommendation Engine — rule-based suggestions based on profile (age, weight, goal), displayed as &quot;Forge AI Suggests&quot;</li>
+<li>Body Composition Timeline — photo upload + manual measurements on a visual timeline</li>
+<li>Real ML-based recommendation engine (upgrade from rule-based)</li>
+<li>NFC attendance scanning</li>
+<li>Video exercise library with form tips</li>
+<li>Wearable device integration (Apple Watch, Fitbit)</li>
+<li>Owner financial forecasting / churn prediction</li>
+<li>Multi-branch gym management</li>
+<li>White-label / SaaS mode</li>
+</ul>
+<hr>
+<h2 id="3-monetization-strategies">3. Monetization Strategies</h2>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Freemium SaaS</strong></td>
+<td>Free for 1 trainer + 25 members; paid tiers for larger gyms</td>
+</tr>
+<tr>
+<td><strong>Trainer Marketplace Commission</strong></td>
+<td>10-15% commission on trainer session bookings</td>
+</tr>
+<tr>
+<td><strong>Premium Analytics</strong></td>
+<td>Advanced dashboards (churn prediction, revenue forecasting) for owners on Pro plan</td>
+</tr>
+<tr>
+<td><strong>In-App Purchases</strong></td>
+<td>Members buy premium workout programs, specialized diet plans</td>
+</tr>
+<tr>
+<td><strong>Affiliate Marketing</strong></td>
+<td>Supplement, gear, and equipment recommendations with affiliate links</td>
+</tr>
+<tr>
+<td><strong>White-Label Licensing</strong></td>
+<td>Gyms pay for branded versions of the app</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="4-growth-hooks--engagement">4. Growth Hooks &amp; Engagement</h2>
+<ul>
+<li><strong>Streaks &amp; Badges</strong>: Daily workout streak, &quot;Iron Week&quot; (7 days), &quot;Forge Master&quot; (30 days)</li>
+<li><strong>Monthly Challenges</strong>: Owner creates gym-wide challenges (e.g., &quot;Most Workouts in March&quot;)</li>
+<li><strong>Referral Bonuses</strong>: Members earn badge + points for referring friends</li>
+<li><strong>Progress Sharing</strong>: Members can share body-comp timelines to social media (watermarked with Forge branding)</li>
+<li><strong>Trainer Spotlight</strong>: Top-rated trainers featured on the community board</li>
+<li><strong>Smart Nudges</strong>: &quot;You're 1 workout away from your streak!&quot; push notification</li>
+</ul>
+<hr>
+<h2 id="5-tech-stack">5. Tech Stack</h2>
+<h3 id="phase-1--web-mvp-all-roles">Phase 1 — Web MVP (All Roles)</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Build Tool</strong></td>
+<td>Vite</td>
+<td>Fastest HMR, excellent DX</td>
+</tr>
+<tr>
+<td><strong>UI</strong></td>
+<td>React 18</td>
+<td>Component model, huge ecosystem</td>
+</tr>
+<tr>
+<td><strong>Routing</strong></td>
+<td>React Router v6</td>
+<td>Standard, declarative routing</td>
+</tr>
+<tr>
+<td><strong>Styling</strong></td>
+<td>Vanilla CSS + CSS Variables</td>
+<td>Full control, no framework overhead, shared design tokens</td>
+</tr>
+<tr>
+<td><strong>Charts</strong></td>
+<td>Recharts</td>
+<td>Lightweight, React-native charting (Owner dashboards)</td>
+</tr>
+<tr>
+<td><strong>Icons</strong></td>
+<td>Lucide React</td>
+<td>Clean, minimal icon set</td>
+</tr>
+<tr>
+<td><strong>Animations</strong></td>
+<td>CSS transitions + Framer Motion (light)</td>
+<td>Smooth micro-interactions</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>React Context + useReducer</td>
+<td>Simple, no external dependency for MVP</td>
+</tr>
+<tr>
+<td><strong>Mock Data</strong></td>
+<td>JSON files + Context providers</td>
+<td>Simulates backend; easy to swap for real API later</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-2--mobile-apps-trainer--member">Phase 2 — Mobile Apps (Trainer &amp; Member)</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework</strong></td>
+<td>React Native (Expo)</td>
+<td>Cross-platform iOS + Android, shared JS knowledge</td>
+</tr>
+<tr>
+<td><strong>Navigation</strong></td>
+<td>React Navigation v6</td>
+<td>Standard mobile navigation (stack, tabs, drawer)</td>
+</tr>
+<tr>
+<td><strong>UI Components</strong></td>
+<td>React Native Paper</td>
+<td>Material Design components, dark theme support</td>
+</tr>
+<tr>
+<td><strong>Charts</strong></td>
+<td>Victory Native</td>
+<td>Lightweight charting for mobile</td>
+</tr>
+<tr>
+<td><strong>Camera</strong></td>
+<td>expo-camera</td>
+<td>Progress photos, document scanning</td>
+</tr>
+<tr>
+<td><strong>QR/Barcode</strong></td>
+<td>expo-barcode-scanner</td>
+<td>QR check-in scanning</td>
+</tr>
+<tr>
+<td><strong>Push Notifications</strong></td>
+<td>Firebase FCM + expo-notifications</td>
+<td>Reliable cross-platform push</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>Same Context + useReducer patterns</td>
+<td>Consistency with web codebase</td>
+</tr>
+<tr>
+<td><strong>Offline</strong></td>
+<td>AsyncStorage + sync queue</td>
+<td>Workout logs work without connectivity</td>
+</tr>
+</tbody>
+</table>
+<h3 id="shared-across-platforms">Shared Across Platforms</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Business Logic</strong></td>
+<td><code>packages/shared/</code> (TypeScript)</td>
+<td>Calorie formulas, validators, data transforms — used by both web and mobile</td>
+</tr>
+<tr>
+<td><strong>API Client</strong></td>
+<td>Fetch / Axios wrapper</td>
+<td>Same service layer, same request patterns</td>
+</tr>
+<tr>
+<td><strong>Design Tokens</strong></td>
+<td>JSON token file</td>
+<td>Colors, spacing, typography shared between CSS variables and React Native StyleSheet</td>
+</tr>
+<tr>
+<td><strong>Types / Models</strong></td>
+<td>TypeScript interfaces</td>
+<td>Single source of truth for data shapes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!NOTE]
+Phase 1 is <strong>frontend-only</strong> with mock data. The architecture is designed so swapping mock data providers for real API calls is a one-line change per module. ~65% of non-UI code will be shared across web and mobile.</p>
+</blockquote>
+<hr>
+<h2 id="6-uiux-design-language">6. UI/UX Design Language</h2>
+<h3 id="design-principles">Design Principles</h3>
+<ul>
+<li><strong>Dark-first theme</strong> with a warm accent palette (amber/orange on charcoal)</li>
+<li><strong>Card-based layouts</strong> — every data unit lives in a softly elevated card</li>
+<li><strong>Generous whitespace</strong> — the app should breathe</li>
+<li><strong>Mono + Sans pairing</strong> — <code>Inter</code> for UI, <code>JetBrains Mono</code> for data/numbers</li>
+<li><strong>Micro-animations</strong> — smooth page transitions, card hover lifts, progress bar fills, badge unlocks</li>
+<li><strong>Platform-adaptive</strong>: full sidebar nav on web, bottom tab nav on mobile</li>
+</ul>
+<h3 id="color-palette-shared-design-tokens">Color Palette (Shared Design Tokens)</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bg-primary</code></td>
+<td><code>#0F0F0F</code></td>
+<td>App background</td>
+</tr>
+<tr>
+<td><code>--bg-card</code></td>
+<td><code>#1A1A1A</code></td>
+<td>Card surfaces</td>
+</tr>
+<tr>
+<td><code>--bg-card-hover</code></td>
+<td><code>#242424</code></td>
+<td>Card hover state (web) / pressed state (mobile)</td>
+</tr>
+<tr>
+<td><code>--accent</code></td>
+<td><code>#F59E0B</code></td>
+<td>Primary accent (amber)</td>
+</tr>
+<tr>
+<td><code>--accent-glow</code></td>
+<td><code>#F59E0B33</code></td>
+<td>Glow effects</td>
+</tr>
+<tr>
+<td><code>--text-primary</code></td>
+<td><code>#F5F5F5</code></td>
+<td>Main text</td>
+</tr>
+<tr>
+<td><code>--text-secondary</code></td>
+<td><code>#A3A3A3</code></td>
+<td>Secondary text</td>
+</tr>
+<tr>
+<td><code>--success</code></td>
+<td><code>#22C55E</code></td>
+<td>Positive metrics</td>
+</tr>
+<tr>
+<td><code>--danger</code></td>
+<td><code>#EF4444</code></td>
+<td>Alerts, overdue</td>
+</tr>
+<tr>
+<td><code>--gradient-hero</code></td>
+<td><code>linear-gradient(135deg, #F59E0B, #EF4444)</code></td>
+<td>Hero elements</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="7-project-structure">7. Project Structure</h2>
+<h3 id="phase-1--web-mvp-monorepo-ready">Phase 1 — Web MVP (Monorepo-ready)</h3>
+<pre class="hljs"><code><div>d:\Forge Gym Management Application\
+├── index.html
+├── vite.config.js
+├── package.json
+├── public/
+│   └── forge-logo.svg
+├── src/
+│   ├── main.jsx                    # Entry point
+│   ├── App.jsx                     # Router + layout
+│   ├── index.css                   # Global styles + design tokens
+│   │
+│   ├── components/                 # Shared UI components (web)
+│   │   ├── Sidebar.jsx
+│   │   ├── TopBar.jsx
+│   │   ├── StatCard.jsx
+│   │   ├── Badge.jsx
+│   │   ├── QRCode.jsx
+│   │   ├── ProgressRing.jsx
+│   │   ├── Modal.jsx
+│   │   └── ChatBubble.jsx
+│   │
+│   ├── layouts/
+│   │   └── DashboardLayout.jsx     # Sidebar + content shell
+│   │
+│   ├── pages/
+│   │   ├── Login.jsx
+│   │   ├── Onboarding.jsx
+│   │   │
+│   │   ├── owner/                  # 🖥️ Permanent web home
+│   │   │   ├── OwnerDashboard.jsx
+│   │   │   ├── Members.jsx
+│   │   │   ├── Trainers.jsx
+│   │   │   ├── Revenue.jsx
+│   │   │   └── Notifications.jsx
+│   │   │
+│   │   ├── trainer/                # 📱 Web prototype → Mobile in Phase 2
+│   │   │   ├── TrainerDashboard.jsx
+│   │   │   ├── Clients.jsx
+│   │   │   ├── WorkoutBuilder.jsx
+│   │   │   ├── DietBuilder.jsx
+│   │   │   └── ProgressTracker.jsx
+│   │   │
+│   │   └── member/                 # 📱 Web prototype → Mobile in Phase 2
+│   │       ├── MemberDashboard.jsx
+│   │       ├── WorkoutLog.jsx
+│   │       ├── CaloriesBurnt.jsx
+│   │       ├── DietPlan.jsx        # PT members only
+│   │       ├── Attendance.jsx
+│   │       ├── Leaderboard.jsx
+│   │       └── Messages.jsx
+│   │
+│   ├── data/                       # Mock data (JSON-like)
+│   │   ├── members.js
+│   │   ├── trainers.js
+│   │   ├── workouts.js
+│   │   ├── diets.js
+│   │   └── analytics.js
+│   │
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   │   └── AppContext.jsx
+│   │
+│   └── utils/
+│       └── helpers.js              # Calorie formulas, formatters
+</div></code></pre>
+<h3 id="phase-2--monorepo-after-mobile-addition">Phase 2 — Monorepo After Mobile Addition</h3>
+<pre class="hljs"><code><div>d:\Forge Gym Management Application\
+├── packages/
+│   ├── shared/                     # 🔗 Shared business logic
+│   │   ├── package.json
+│   │   ├── src/
+│   │   │   ├── models/             # TypeScript interfaces
+│   │   │   ├── services/           # API client layer
+│   │   │   ├── utils/              # Calorie formulas, validators
+│   │   │   └── constants/          # Design tokens as JSON
+│   │   └── tsconfig.json
+│   │
+│   ├── web/                        # 🖥️ Owner Dashboard (React + Vite)
+│   │   ├── index.html
+│   │   ├── vite.config.js
+│   │   ├── package.json
+│   │   └── src/                    # Owner pages, components, styles
+│   │
+│   └── mobile/                     # 📱 Trainer + Member App (React Native)
+│       ├── app.json
+│       ├── package.json
+│       ├── App.tsx
+│       └── src/
+│           ├── screens/
+│           │   ├── trainer/        # Trainer screens
+│           │   └── member/         # Member screens
+│           ├── components/         # Mobile-specific components
+│           ├── navigation/         # Stack + Tab navigators
+│           └── theme/              # React Native StyleSheet from tokens
+│
+├── package.json                    # Monorepo root (workspaces)
+└── README.md
+</div></code></pre>
+<hr>
+<h2 id="8-proposed-changes--phase-1-current-build">8. Proposed Changes — Phase 1 (Current Build)</h2>
+<h3 id="project-initialization">Project Initialization</h3>
+<h4 id="new-packagejsonfiledforge20gym20management20applicationpackagejson">[NEW] [package.json](file:///d:/Forge%20Gym%20Management%20Application/package.json)</h4>
+<p>Initialize via <code>npx create-vite@latest ./ --template react</code>. Adds Recharts and Lucide React as dependencies.</p>
+<h4 id="new-viteconfigjsfiledforge20gym20management20applicationviteconfigjs">[NEW] [vite.config.js](file:///d:/Forge%20Gym%20Management%20Application/vite.config.js)</h4>
+<p>Standard Vite React config.</p>
+<h4 id="new-indexhtmlfiledforge20gym20management20applicationindexhtml">[NEW] [index.html](file:///d:/Forge%20Gym%20Management%20Application/index.html)</h4>
+<p>Entry HTML with Inter + JetBrains Mono font imports, meta tags, dark background.</p>
+<hr>
+<h3 id="design-system--global-styles">Design System &amp; Global Styles</h3>
+<h4 id="new-indexcssfiledforge20gym20management20applicationsrcindexcss">[NEW] [index.css](file:///d:/Forge%20Gym%20Management%20Application/src/index.css)</h4>
+<p>All CSS custom properties (color palette, spacing, typography, shadows), base resets, card styles, button variants, animation keyframes, responsive breakpoints. These tokens are designed to map directly to React Native StyleSheet values in Phase 2.</p>
+<hr>
+<h3 id="shared-components">Shared Components</h3>
+<h4 id="new-all-files-in-srccomponents">[NEW] All files in <code>src/components/</code></h4>
+<p><code>Sidebar</code>, <code>TopBar</code>, <code>StatCard</code>, <code>Badge</code>, <code>QRCode</code>, <code>ProgressRing</code>, <code>Modal</code>, <code>ChatBubble</code> — reusable across all three role modules during Phase 1. In Phase 2, mobile-specific versions will be created in <code>packages/mobile/src/components/</code>.</p>
+<hr>
+<h3 id="layouts">Layouts</h3>
+<h4 id="new-dashboardlayoutjsxfiledforge20gym20management20applicationsrclayoutsdashboardlayoutjsx">[NEW] [DashboardLayout.jsx](file:///d:/Forge%20Gym%20Management%20Application/src/layouts/DashboardLayout.jsx)</h4>
+<p>Sidebar + TopBar + scrollable content area. Collapses sidebar to bottom nav on mobile viewport (Phase 1 responsive fallback; replaced by native tab nav in Phase 2).</p>
+<hr>
+<h3 id="pages--auth">Pages — Auth</h3>
+<h4 id="new-loginjsxfiledforge20gym20management20applicationsrcpagesloginjsx">[NEW] [Login.jsx](file:///d:/Forge%20Gym%20Management%20Application/src/pages/Login.jsx)</h4>
+<p>Dark-themed login with role selector tabs, animated transitions. In Phase 2, Member/Trainer login moves to the mobile app.</p>
+<h4 id="new-onboardingjsxfiledforge20gym20management20applicationsrcpagesonboardingjsx">[NEW] [Onboarding.jsx](file:///d:/Forge%20Gym%20Management%20Application/src/pages/Onboarding.jsx)</h4>
+<p>3-step onboarding wizard with progress dots and slide animations.</p>
+<hr>
+<h3 id="pages--owner-module-%F0%9F%96%A5%EF%B8%8F-web--permanent">Pages — Owner Module (🖥️ Web — Permanent)</h3>
+<h4 id="new-all-files-in-srcpagesowner">[NEW] All files in <code>src/pages/owner/</code></h4>
+<p><code>OwnerDashboard</code> (KPI cards + charts), <code>Members</code> (searchable directory), <code>Trainers</code> (performance cards), <code>Revenue</code> (payment analytics), <code>Notifications</code> (composer UI). These pages stay in the web app permanently.</p>
+<hr>
+<h3 id="pages--trainer-module-%F0%9F%93%B1-web-prototype-%E2%86%92-mobile-in-phase-2">Pages — Trainer Module (📱 Web Prototype → Mobile in Phase 2)</h3>
+<h4 id="new-all-files-in-srcpagestrainer">[NEW] All files in <code>src/pages/trainer/</code></h4>
+<p><code>TrainerDashboard</code> (client overview), <code>Clients</code> (profile cards), <code>WorkoutBuilder</code> (drag-style exercise picker), <code>DietBuilder</code> (meal plan grid, PT members only), <code>ProgressTracker</code> (photo timeline + measurements, PT members only). These serve as functional prototypes; the UI logic and data flows will be re-implemented as React Native screens in Phase 2.</p>
+<hr>
+<h3 id="pages--member-module-%F0%9F%93%B1-web-prototype-%E2%86%92-mobile-in-phase-2">Pages — Member Module (📱 Web Prototype → Mobile in Phase 2)</h3>
+<h4 id="new-all-files-in-srcpagesmember">[NEW] All files in <code>src/pages/member/</code></h4>
+<p><code>MemberDashboard</code> (today's plan + streaks + badges), <code>WorkoutLog</code> (checkbox exercise list), <code>CaloriesBurnt</code> (estimated calories per exercise card), <code>DietPlan</code> (meal cards, PT members only), <code>Attendance</code> (QR code + history), <code>Leaderboard</code> (ranked member list), <code>Messages</code> (chat with trainer). These serve as functional prototypes for Phase 2 migration.</p>
+<hr>
+<h3 id="data--context">Data &amp; Context</h3>
+<h4 id="new-all-files-in-srcdata-and-srccontext">[NEW] All files in <code>src/data/</code> and <code>src/context/</code></h4>
+<p>Mock data sets for members, trainers, workouts, diets, analytics. Auth and App context providers. In Phase 2, mock data layers are replaced with API service calls from <code>packages/shared/</code>.</p>
+<hr>
+<h3 id="utilities">Utilities</h3>
+<h4 id="new-helpersjsfiledforge20gym20management20applicationsrcutilshelpersjs">[NEW] [helpers.js](file:///d:/Forge%20Gym%20Management%20Application/src/utils/helpers.js)</h4>
+<p>Shared utility functions: date formatting, calorie estimation formulas (MET-based), data transformers. In Phase 2, these move to <code>packages/shared/src/utils/</code>.</p>
+<hr>
+<h2 id="9-verification-plan">9. Verification Plan</h2>
+<h3 id="phase-1--web-mvp-browser-based">Phase 1 — Web MVP (Browser-based)</h3>
+<ol>
+<li><strong>Start dev server</strong>: <code>npm run dev</code> in the project root</li>
+<li><strong>Login Flow</strong>: Navigate to localhost, verify login page renders, select each role, confirm redirect to correct dashboard</li>
+<li><strong>Owner Dashboard</strong>: Verify KPI cards display data, charts render, member/trainer lists are populated</li>
+<li><strong>Trainer Module</strong>: Verify client list, workout builder interactions, diet builder grid, progress photo timeline</li>
+<li><strong>Member Module</strong>: Verify dashboard streaks/badges, workout log checkboxes, calories burnt card, QR code renders, leaderboard ranks, message bubbles</li>
+<li><strong>Responsive</strong>: Resize browser to mobile width, verify sidebar collapses to bottom nav, cards stack vertically (validates mobile-readiness for Phase 2)</li>
+<li><strong>Animations</strong>: Verify page transitions, card hover effects, and progress ring animations are smooth</li>
+</ol>
+<h3 id="phase-2--mobile-apps-deviceemulator">Phase 2 — Mobile Apps (Device/Emulator)</h3>
+<ul>
+<li>Run Trainer app on iOS simulator + Android emulator</li>
+<li>Run Member app on iOS simulator + Android emulator</li>
+<li>Verify native QR scanning works</li>
+<li>Verify push notifications are received</li>
+<li>Verify offline workout logging syncs when back online</li>
+<li>Verify camera captures progress photos</li>
+</ul>
+<h3 id="manual-verification-user">Manual Verification (User)</h3>
+<ul>
+<li>Visually review the design and provide feedback on color palette, spacing, and overall feel</li>
+<li>Test Owner dashboard on desktop browser</li>
+<li>Test Trainer/Member apps on real physical devices</li>
+</ul>
+
+</body>
+</html>
