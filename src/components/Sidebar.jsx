@@ -1,10 +1,10 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useApp } from '../context/AppContext'
 import { getInitials } from '../utils/helpers'
 import {
     LayoutDashboard, Users, Dumbbell, UtensilsCrossed,
-    TrendingUp, Bell, LogOut, UserCircle, Trophy,
+    TrendingUp, Bell, UserCircle, Trophy,
     MessageSquare, CalendarCheck, Flame, ChevronLeft,
     Settings, Target, ChartBar, Camera, Activity, CalendarDays, Key, MapPin
 } from 'lucide-react'
@@ -70,19 +70,13 @@ function buildMenuItems(role, state, user) {
 }
 
 export default function Sidebar() {
-    const { user, logout } = useAuth()
+    const { user } = useAuth()
     const { state } = useApp()
-    const navigate = useNavigate()
     const items = buildMenuItems(user?.role, state, user)
 
     // For member: look up assigned trainer from state
     const memberData = user?.role === 'member' ? (state.members.find(m => m.id === user?.id) || state.members[0]) : null
     const myTrainer = memberData?.trainerId ? state.trainers.find(t => t.id === memberData.trainerId) : null
-
-    const handleLogout = () => {
-        logout()
-        navigate('/login')
-    }
 
     return (
         <aside className="sidebar">
@@ -122,15 +116,6 @@ export default function Sidebar() {
                     )
                 })}
             </nav>
-
-            <div className="sidebar-footer">
-                <button className="sidebar-link sidebar-logout" onClick={handleLogout} title="Logout">
-                    <div className="sidebar-link-content">
-                        <LogOut size={18} />
-                        <span>Logout</span>
-                    </div>
-                </button>
-            </div>
 
             {user?.role === 'member' && myTrainer && (
                 <div className="sidebar-assigned-staff">

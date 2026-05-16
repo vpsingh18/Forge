@@ -56,8 +56,17 @@ export default function Trainers() {
         }))
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const phoneRegex = /^\+?[\d\s-]{10,}$/
+    
+    const isEmailOk = form.email.trim() !== '' && emailRegex.test(form.email)
+    const isPhoneOk = form.phone.trim() === '' || phoneRegex.test(form.phone)
+    
+    const emailError = form.email && !emailRegex.test(form.email) ? 'Invalid email format' : ''
+    const phoneError = form.phone && !phoneRegex.test(form.phone) ? 'Invalid phone format' : ''
+
     const handleSave = () => {
-        if (!form.name.trim() || !form.email.trim()) return
+        if (!form.name.trim() || !isEmailOk || !isPhoneOk) return
 
         if (editing) {
             dispatch({
@@ -159,13 +168,15 @@ export default function Trainers() {
                         <input className="input" value={form.name} onChange={e => handleField('name', e.target.value)} placeholder="Priya Sharma" />
                     </div>
                     <div className="crud-row-2">
-                        <div className="crud-row">
+                        <div className="crud-row" style={{ display: 'flex', flexDirection: 'column' }}>
                             <label className="crud-label">Email *</label>
-                            <input className="input" type="email" value={form.email} onChange={e => handleField('email', e.target.value)} placeholder="priya@forgegym.com" />
+                            <input className={`input ${emailError ? 'input-error' : ''}`} type="email" value={form.email} onChange={e => handleField('email', e.target.value)} placeholder="priya@forgegym.com" style={emailError ? { borderColor: 'var(--danger)' } : {}} />
+                            {emailError && <span style={{ color: 'var(--danger)', fontSize: 11, marginTop: 4 }}>{emailError}</span>}
                         </div>
-                        <div className="crud-row">
+                        <div className="crud-row" style={{ display: 'flex', flexDirection: 'column' }}>
                             <label className="crud-label">Phone</label>
-                            <input className="input" value={form.phone} onChange={e => handleField('phone', e.target.value)} placeholder="+91 99887 76655" />
+                            <input className={`input ${phoneError ? 'input-error' : ''}`} value={form.phone} onChange={e => handleField('phone', e.target.value)} placeholder="+91 99887 76655" style={phoneError ? { borderColor: 'var(--danger)' } : {}} />
+                            {phoneError && <span style={{ color: 'var(--danger)', fontSize: 11, marginTop: 4 }}>{phoneError}</span>}
                         </div>
                     </div>
                     <div className="crud-row-2">

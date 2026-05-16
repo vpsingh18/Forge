@@ -1,31 +1,71 @@
 .td-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: flex-end;
     margin-bottom: var(--space-6);
 }
 
 .td-title {
-    font-size: var(--text-3xl);
+    font-size: var(--text-4xl);
+    font-weight: 800;
     letter-spacing: 0.05em;
+    line-height: 1;
 }
 
 .td-sub {
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-size: 12px;
     margin-top: var(--space-1);
+    font-family: var(--font-mono);
 }
 
 .td-layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr var(--right-panel-width);
     gap: var(--space-6);
+}
+
+.td-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
 .td-right {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    border-left: 1px solid var(--border);
+    padding-left: var(--space-5);
+}
+
+.td-section-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.td-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.td-panel-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.td-separator {
+    height: 1px;
+    background: var(--border);
 }
 
 /* Roster Table */
@@ -44,6 +84,7 @@
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    font-family: var(--font-mono);
 }
 
 .td-roster-row {
@@ -53,6 +94,12 @@
     align-items: center;
     padding: var(--space-3);
     border-bottom: 1px solid var(--border);
+    transition: background var(--transition-fast);
+    cursor: pointer;
+}
+
+.td-roster-row:hover {
+    background: var(--bg-card-hover);
 }
 
 .td-client-cell {
@@ -62,13 +109,13 @@
 }
 
 .td-client-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-full);
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 800;
     color: white;
     flex-shrink: 0;
@@ -91,25 +138,66 @@
 
 /* Session Cards */
 .td-session-card {
-    background: var(--bg-input);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
     border-radius: var(--radius-md);
-    padding: var(--space-3);
-    margin-bottom: var(--space-3);
+    padding: 13px 14px;
+    margin-bottom: 9px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.td-session-card:hover {
+    border-color: var(--accent);
+}
+
+.td-session-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    margin-bottom: 3px;
+}
+
+.td-session-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.td-session-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.td-session-status {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    background: var(--bg-input);
+    color: var(--text-muted);
 }
 
 /* Calendar */
 .td-cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
+    gap: 5px;
     text-align: center;
 }
 
 .td-cal-label {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     color: var(--text-muted);
     padding: 4px;
+    font-family: var(--font-mono);
 }
 
 .td-cal-day {
@@ -120,11 +208,28 @@
     font-size: 11px;
     border-radius: 4px;
     color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    font-size: 8px;
 }
 
 .td-cal-attended {
-    background: var(--success);
-    color: white;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg-primary);
+    font-weight: 700;
+}
+
+.td-cal-missed {
+    background: var(--danger-bg);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: var(--danger);
+}
+
+.td-cal-today {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+    color: var(--accent);
     font-weight: 700;
 }
 
@@ -132,12 +237,20 @@
     .td-layout {
         grid-template-columns: 1fr;
     }
+
+    .td-right {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--border);
+        padding-top: var(--space-4);
+    }
 }
 
 @media (max-width: 768px) {
     .td-header {
         flex-direction: column;
         gap: var(--space-4);
+        align-items: flex-start;
     }
 
     .td-roster-header,

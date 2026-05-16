@@ -3,11 +3,34 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: var(--space-5);
-    transition: background var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    animation: fadeInUp var(--transition-slow) ease both;
 }
 
 .stat-card:hover {
     background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+/* Accent top-line on hover */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
 }
 
 .stat-card-header {
@@ -23,18 +46,29 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--text-muted);
+    font-family: var(--font-mono);
 }
 
 .stat-card-value {
-    font-size: var(--text-3xl);
-    font-weight: 700;
+    font-size: var(--text-4xl);
+    font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: 2px;
     color: var(--accent);
+    line-height: 1.1;
 }
 
 .stat-card-sub {
     font-size: var(--text-xs);
     color: var(--text-muted);
     margin-top: 2px;
+}
+
+/* Trend tag in absolute top-right like the mockup */
+.stat-card .tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-family: var(--font-mono);
 }

@@ -3,86 +3,229 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './Login.css'
 
-const ROLES = [
-    {
-        id: 'owner',
-        label: 'Owner',
-        emoji: '👔',
-        description: 'Manage your gym — members, revenue & analytics'
-    },
-    {
-        id: 'trainer',
-        label: 'Trainer',
-        emoji: '🏋️',
-        description: 'Manage your clients, plans & progress'
-    },
-    {
-        id: 'member',
-        label: 'Member',
-        emoji: '🙋',
-        description: 'Track workouts, diet & gym attendance'
-    }
-]
+const DEMO_ACCOUNTS = {
+    'member@forge.io': { pass: 'member123', role: 'member', name: 'Arjun Mehta' },
+    'trainer@forge.io': { pass: 'trainer123', role: 'trainer', name: 'Priya Sharma' },
+    'owner@forge.io': { pass: 'owner123', role: 'owner', name: 'Rajesh Kumar' },
+}
+
+const ROLE_META = {
+    member: { pillClass: 'login-pill-member', label: 'MEMBER MODULE', barColor: 'var(--accent)' },
+    trainer: { pillClass: 'login-pill-trainer', label: 'TRAINER MODULE', barColor: '#8B5CF6' },
+    owner: { pillClass: 'login-pill-owner', label: 'OWNER MODULE', barColor: '#F59E0B' },
+}
 
 export default function Login() {
-    const [selectedRole, setSelectedRole] = useState(null)
-    const { login, isLoading } = useAuth()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [passVisible, setPassVisible] = useState(false)
+    const [remember, setRemember] = useState(false)
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [redirect, setRedirect] = useState(null) // { role, name }
+
+    const { login } = useAuth()
     const navigate = useNavigate()
 
-    const handleLogin = () => {
-        if (!selectedRole) return
-        login(selectedRole)
-        setTimeout(() => navigate(`/${selectedRole}`), 700)
+    const fill = (e, p) => {
+        setEmail(e)
+        setPassword(p)
+        setError('')
     }
 
+    const handleLogin = () => {
+        setError('')
+        if (!email.trim() || !password) {
+            setError('Please enter your email and password.')
+            return
+        }
+
+        setLoading(true)
+
+        setTimeout(() => {
+            const account = DEMO_ACCOUNTS[email.trim().toLowerCase()]
+            if (!account || account.pass !== password) {
+                setLoading(false)
+                setError('Incorrect email or password. Please try again.')
+                return
+            }
+
+            // Auth success — show redirect overlay
+            setRedirect({ role: account.role, name: account.name })
+            login(account.role)
+
+            setTimeout(() => {
+                navigate(`/${account.role}`)
+            }, 1700)
+        }, 800)
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') handleLogin()
+    }
+
+    const meta = redirect ? ROLE_META[redirect.role] : null
+
     return (
-        <div className="login-page">
-            <div className="login-bg-glow" />
+        <div className="login-page" onKeyDown={handleKeyDown}>
 
-            <div className="login-container animate-fade-in-up">
-                <div className="login-header">
-                    <span className="login-logo-icon">⚒️</span>
-                    <h1 className="login-title text-gradient">FORGE</h1>
-                    <p className="login-subtitle">Gym Management Platform</p>
+            {/* Redirect overlay */}
+            {redirect && (
+                <div className="login-redirect-overlay">
+                    <div className="login-redirect-logo">FORGE<span>.</span></div>
+                    <div className={`login-redirect-pill ${meta.pillClass}`}>{meta.label}</div>
+                    <div className="login-redirect-msg">
+                        Welcome back, {redirect.name.split(' ')[0]}. Loading your dashboard...
+                    </div>
+                    <div className="login-redirect-bar-wrap">
+                        <div
+                            className="login-redirect-bar"
+                            style={{ background: meta.barColor, width: '100%' }}
+                        />
+                    </div>
                 </div>
+            )}
 
-                <div className="login-card card-flat">
-                    <h2 className="login-card-title">Sign in as</h2>
-                    <p className="login-card-desc">Choose your role to access your dashboard</p>
+            {/* Main login card */}
+            <div className="login-wrap">
+                {/* Accent top line */}
+                <div className="login-wrap-topline" />
 
-                    <div className="role-grid">
-                        {ROLES.map(role => (
-                            <button
-                                key={role.id}
-                                className={`role-card ${selectedRole === role.id ? 'role-card-selected' : ''}`}
-                                onClick={() => setSelectedRole(role.id)}
-                                id={`role-${role.id}`}
-                            >
-                                <span className="role-emoji">{role.emoji}</span>
-                                <span className="role-label">{role.label}</span>
-                                <span className="role-desc">{role.description}</span>
-                                {selectedRole === role.id && (
-                                    <span className="role-check">✓</span>
-                                )}
-                            </button>
-                        ))}
+                {/* LEFT: Brand Panel */}
+                <div className="login-brand">
+                    <div>
+                        <div className="login-brand-logo">FORGE<span>.</span></div>
+                        <div className="login-brand-tagline">Athletic Performance Platform</div>
                     </div>
 
+                    <div className="login-brand-hero">
+                        <div className="login-brand-headline">
+                            TRAIN<br />
+                            <span className="login-hl">SMARTER.</span><br />
+                            GROW FASTER.
+                        </div>
+                        <p className="login-brand-desc">
+                            The all-in-one platform for gym owners, trainers, and athletes to manage workouts, nutrition, and performance.
+                        </p>
+                        <div className="login-brand-stats">
+                            <div className="login-bstat">
+                                <div className="login-bstat-val">12K+</div>
+                                <div className="login-bstat-lbl">Athletes</div>
+                            </div>
+                            <div className="login-bstat">
+                                <div className="login-bstat-val">340+</div>
+                                <div className="login-bstat-lbl">Gyms</div>
+                            </div>
+                            <div className="login-bstat">
+                                <div className="login-bstat-val">98%</div>
+                                <div className="login-bstat-lbl">Retention</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="login-brand-footer">© 2025 Forge Inc. — v2.4.1</div>
+                </div>
+
+                {/* RIGHT: Form Panel */}
+                <div className="login-form-panel">
+                    <h1 className="login-form-heading">WELCOME BACK</h1>
+                    <p className="login-form-sub">Sign in — your role is detected automatically</p>
+
+                    {/* Demo hint */}
+                    <div className="login-hint">
+                        <span>💡</span>
+                        <div className="login-hint-text">
+                            <strong>DEMO ACCOUNTS — click to fill</strong>
+                            <div className="login-hint-creds">
+                                <span className="login-hint-cred">
+                                    Member: <b onClick={() => fill('member@forge.io', 'member123')}>member@forge.io</b>
+                                </span>
+                                <span className="login-hint-cred">
+                                    Trainer: <b onClick={() => fill('trainer@forge.io', 'trainer123')}>trainer@forge.io</b>
+                                </span>
+                                <span className="login-hint-cred">
+                                    Owner: <b onClick={() => fill('owner@forge.io', 'owner123')}>owner@forge.io</b>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Error */}
+                    {error && (
+                        <div className="login-error">
+                            <span>⚠</span> {error}
+                        </div>
+                    )}
+
+                    {/* Email */}
+                    <div className="login-fg">
+                        <label className="login-label">Email Address</label>
+                        <div className="login-input-wrap">
+                            <input
+                                className={`login-input ${error ? 'login-input-err' : ''}`}
+                                type="email"
+                                placeholder="you@forge.io"
+                                value={email}
+                                onChange={e => { setEmail(e.target.value); setError('') }}
+                                autoComplete="email"
+                                id="login-email"
+                            />
+                            <span className="login-input-icon">✉</span>
+                        </div>
+                    </div>
+
+                    {/* Password */}
+                    <div className="login-fg">
+                        <label className="login-label">Password</label>
+                        <div className="login-input-wrap">
+                            <input
+                                className={`login-input ${error ? 'login-input-err' : ''}`}
+                                type={passVisible ? 'text' : 'password'}
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={e => { setPassword(e.target.value); setError('') }}
+                                autoComplete="current-password"
+                                id="login-password"
+                            />
+                            <span
+                                className="login-input-icon"
+                                onClick={() => setPassVisible(!passVisible)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {passVisible ? '🙈' : '👁'}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Remember + Forgot */}
+                    <div className="login-meta-row">
+                        <div className="login-remember" onClick={() => setRemember(!remember)}>
+                            <div className={`login-checkbox ${remember ? 'login-checkbox-on' : ''}`}>
+                                {remember && '✓'}
+                            </div>
+                            <span>Remember me</span>
+                        </div>
+                        <a className="login-forgot" href="#">Forgot password?</a>
+                    </div>
+
+                    {/* Submit */}
                     <button
-                        className="btn btn-primary btn-lg login-btn"
+                        className="login-submit-btn"
                         onClick={handleLogin}
-                        disabled={!selectedRole || isLoading}
+                        disabled={loading}
                         id="login-submit"
                     >
-                        {isLoading ? (
-                            <span className="login-spinner" />
+                        {loading ? (
+                            <><div className="login-spinner" /> SIGNING IN...</>
                         ) : (
-                            `Continue as ${selectedRole ? ROLES.find(r => r.id === selectedRole)?.label : '...'}`
+                            'SIGN IN'
                         )}
                     </button>
 
-                    <p className="login-demo-note">
-                        🔒 Demo mode — no credentials needed
+                    <div className="login-or">or</div>
+                    <button className="login-sso-btn">🔑 Continue with SSO</button>
+                    <p className="login-signup-row">
+                        Don't have an account? <a href="#">Get started free →</a>
                     </p>
                 </div>
             </div>
